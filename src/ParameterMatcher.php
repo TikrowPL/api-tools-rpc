@@ -72,6 +72,11 @@ class ParameterMatcher
             $reflectionType        = $reflMethodParam->getType();
             if ($reflectionType instanceof ReflectionNamedType && ! $reflectionType->isBuiltin()) {
                 $typehint = $reflectionType->getName();
+                if ($typehint === 'self') {
+                    $typehint = $reflMethodParam->getDeclaringClass()->getName();
+                } elseif ($typehint === 'parent') {
+                    $typehint = $reflMethodParam->getDeclaringClass()->getParentClass()->getName();
+                }
 
                 if (
                     $typehint === PhpEnvironmentRequest::class
